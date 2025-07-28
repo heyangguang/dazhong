@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>评价详情</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/custom-alert.js"></script>
+    <script src="/static/js/language.js"></script>
+</head>
+<body>
+    <div class="evaluation-wrapper">
+        <!-- 顶部信息栏 -->
+        <div class="evaluation-header">
+            <div class="vehicle-info-bar">
+                <div class="vehicle-icon-container">
+                    <svg class="vehicle-icon-small" viewBox="0 0 60 40" fill="none">
+                        <rect x="10" y="15" width="40" height="12" rx="2" fill="#333"/>
+                        <rect x="15" y="10" width="25" height="8" rx="2" fill="#333"/>
+                        <circle cx="18" cy="28" r="3" fill="#666"/>
+                        <circle cx="42" cy="28" r="3" fill="#666"/>
+                    </svg>
+                </div>
+                <div class="vehicle-name-section">
+                    <h1>Pos.6-{{ vehicle.name }}</h1>
+                    <div class="category-subtitle" id="categoryDisplay">{{ category }}</div>
+                </div>
+            </div>
+            <div class="evaluation-hint" data-lang="evaluation.hint">
+                此页面需要输入评价内容、评价人员和评价分数。完成后请点击右下角保存按钮！
+            </div>
+        </div>
+
+        <div class="evaluation-container">
+            <div class="evaluation-main">
+                <form class="evaluation-form" onsubmit="saveEvaluation(event)">
+                    <!-- 评分区域 -->
+                    <div class="score-section">
+                        <label class="form-label" data-lang="evaluation.evaluator">评价人员</label>
+                        <div class="score-row">
+                            <div class="score-buttons-grid">
+                                <button type="button" class="score-btn score-red" data-score="1" onclick="selectScore(1)">1</button>
+                                <button type="button" class="score-btn score-red" data-score="2" onclick="selectScore(2)">2</button>
+                                <button type="button" class="score-btn score-red" data-score="3" onclick="selectScore(3)">3</button>
+                                <button type="button" class="score-btn score-orange" data-score="4" onclick="selectScore(4)">4</button>
+                                <button type="button" class="score-btn score-orange" data-score="5" onclick="selectScore(5)">5</button>
+                                <button type="button" class="score-btn score-yellow" data-score="6" onclick="selectScore(6)">6</button>
+                                <button type="button" class="score-btn score-yellow" data-score="7" onclick="selectScore(7)">7</button>
+                                <button type="button" class="score-btn score-green" data-score="8" onclick="selectScore(8)">8</button>
+                                <button type="button" class="score-btn score-green" data-score="9" onclick="selectScore(9)">9</button>
+                                <button type="button" class="score-btn score-green" data-score="10" onclick="selectScore(10)">10</button>
+                            </div>
+                            <button type="button" class="btn-no-rate">无法评价</button>
+                        </div>
+                        <div class="score-hint">有项目叫停风险</div>
+                    </div>
+
+                    <!-- 文字编辑区域 -->
+                    <div class="editor-section">
+                        <label class="form-label">文字编辑</label>
+                        <div class="editor-toolbar">
+                            <button type="button" class="editor-btn" onclick="formatText('bold')" title="粗体">B</button>
+                            <button type="button" class="editor-btn" onclick="formatText('italic')" title="斜体">I</button>
+                            <button type="button" class="editor-btn" onclick="formatText('underline')" title="下划线">U</button>
+                            <span class="toolbar-separator"></span>
+                            <button type="button" class="editor-btn" onclick="formatText('insertUnorderedList')" title="无序列表">≡</button>
+                            <button type="button" class="editor-btn" onclick="formatText('insertOrderedList')" title="有序列表">≣</button>
+                            <span class="toolbar-separator"></span>
+                            <button type="button" class="editor-btn" onclick="formatText('justifyLeft')" title="左对齐">⫤</button>
+                            <button type="button" class="editor-btn" onclick="formatText('justifyCenter')" title="居中">≡</button>
+                            <button type="button" class="editor-btn" onclick="formatText('justifyRight')" title="右对齐">⫣</button>
+                        </div>
+                        <div class="editor-content" contenteditable="true" id="evaluationContent"></div>
+                    </div>
+
+                    <!-- 评价人选择和操作按钮 -->
+                    <div class="bottom-section">
+                        <div class="evaluator-section">
+                            <label class="form-label" data-lang="evaluation.selectEvaluator">评价人</label>
+                            <select id="evaluatorSelect" class="evaluator-select" required>
+                                <option value="" data-lang="evaluation.selectEvaluator">请选择评价人 ▼</option>
+                                {% for evaluator in evaluators %}
+                                <option value="{{ evaluator.id }}">{{ evaluator.name }} - {{ evaluator.department }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-save">保存</button>
+                    </div>
+                </form>
+
+                <!-- 右侧操作按钮 -->
+                <div class="side-buttons">
+                    <button class="side-btn" onclick="returnToStop()">
+                        <svg class="side-btn-icon" viewBox="0 0 24 24" fill="none">
+                            <path d="M19 11H5M5 11L11 5M5 11L11 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>返停点</span>
+                    </button>
+                    <button class="side-btn" onclick="markTime()">
+                        <svg class="side-btn-icon" viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>标记时间</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const activityId = {{ activity.id }};
+        const vehicleId = {{ vehicle.id }};
+        const category = "{{ category }}";
+        const vehicleName = "{{ vehicle.name }}";
+        let selectedScore = null;
+
+        // 分类中英文对照
+        const categoryMapping = {
+            '动力总成': 'Aggregate 动力总成',
+            '内饰': 'Interieur 内饰',
+            '底盘': 'Fahrwerk 底盘',
+            '外饰': 'Exterieur 外饰',
+            '声学': 'Akustik 声学',
+            '电子电器': 'Elektrik&Elektronik 电子电器',
+            '其它': 'Allgemein 其它'
+        };
+
+        // 设置分类显示
+        const categoryDisplay = categoryMapping[category] || category;
+        $('#categoryDisplay').text(categoryDisplay);
+
+        function selectScore(score) {
+            selectedScore = score;
+            $('.score-btn').removeClass('active');
+            $(`.score-btn[data-score="${score}"]`).addClass('active');
+        }
+
+        function formatText(command) {
+            document.execCommand(command, false, null);
+            $('#evaluationContent').focus();
+        }
+
+        function saveEvaluation(event) {
+            event.preventDefault();
+            
+            if (!selectedScore) {
+                alert(t('please_select') + '评分');
+                return;
+            }
+
+            const content = $('#evaluationContent').html();
+            if (!content.trim()) {
+                alert(t('please_input') + '评价内容');
+                return;
+            }
+
+            const data = {
+                activity_id: activityId,
+                vehicle_id: vehicleId,
+                evaluator_id: $('#evaluatorSelect').val(),
+                category: category,
+                score: selectedScore,
+                content: content
+            };
+
+            $.ajax({
+                url: '/api/save_evaluation',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function(response) {
+                    alertSuccess(t('save_success'));
+                    setTimeout(() => {
+                        window.location.href = `/categories/${activityId}/${vehicleId}`;
+                    }, 1500);
+                },
+                error: function() {
+                    alertError(t('save_failed'));
+                }
+            });
+        }
+
+        function returnToStop() {
+            window.location.href = `/categories/${activityId}/${vehicleId}`;
+        }
+
+        function markTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleString('zh-CN');
+            const currentContent = $('#evaluationContent').html();
+            $('#evaluationContent').html(currentContent + '<br>[' + timeStr + '] ');
+            $('#evaluationContent').focus();
+        }
+
+
+        // 设置富文本编辑器
+        $('#evaluationContent').on('paste', function(e) {
+            e.preventDefault();
+            const text = (e.originalEvent.clipboardData || window.clipboardData).getData('text');
+            document.execCommand('insertText', false, text);
+        });
+    </script>
+</body>
+</html>

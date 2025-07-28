@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>评价分类</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/custom-alert.js"></script>
+</head>
+<body>
+    <div class="categories-wrapper">
+        <!-- 顶部栏 -->
+        <div class="top-bar-categories">
+            <div class="vehicle-title">
+                <svg class="vehicle-icon-small" viewBox="0 0 60 40" fill="none">
+                    <rect x="10" y="15" width="40" height="12" rx="2" fill="#333"/>
+                    <rect x="15" y="10" width="25" height="8" rx="2" fill="#333"/>
+                    <circle cx="18" cy="28" r="3" fill="#666"/>
+                    <circle cx="42" cy="28" r="3" fill="#666"/>
+                </svg>
+                <h1>{{ vehicle.name }}</h1>
+            </div>
+        </div>
+
+        <!-- 说明文字 -->
+        <div class="categories-instruction">
+            <p>请分别按照对应的专业方向进行评价，在您本台车辆评价完成之后，请点击右下方的"完成"按键、谢谢。</p>
+        </div>
+
+        <!-- 分类网格 -->
+        <div class="categories-container">
+            <div class="categories-grid">
+                {% for category in categories %}
+                <!-- {{ category.name }} -->
+                <div class="category-item">
+                    <div class="category-badge" onclick="showEvaluations('{{ category.name }}'); event.stopPropagation();">0</div>
+                    <div class="category-main">
+                        <div class="category-icon-box">
+                            <svg class="category-icon" viewBox="0 0 40 40" fill="none">
+                                <!-- 发动机/电机图标 -->
+                                <rect x="8" y="12" width="24" height="16" rx="2" fill="currentColor" opacity="0.9"/>
+                                <rect x="5" y="16" width="4" height="8" rx="1" fill="currentColor"/>
+                                <rect x="31" y="16" width="4" height="8" rx="1" fill="currentColor"/>
+                                <circle cx="14" cy="20" r="3" fill="white"/>
+                                <circle cx="26" cy="20" r="3" fill="white"/>
+                                <path d="M20 10 L20 6 M16 11 L13 8 M24 11 L27 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="category-text">
+                            <h3>Aggregate</h3>
+                            <p>动力总成</p>
+                        </div>
+                    </div>
+                    <button class="category-action" onclick="goToEvaluation(this.closest('.category-item').querySelector('.category-text p').innerText)">新建评价 ➤</button>
+                </div>
+
+                <!-- 内饰 -->
+                <div class="category-item">
+                    <div class="category-badge" onclick="showEvaluations('内饰'); event.stopPropagation();">0</div>
+                    <div class="category-main">
+                        <div class="category-icon-box">
+                            <svg class="category-icon" viewBox="0 0 40 40" fill="none">
+                                <!-- 座椅图标 -->
+                                <path d="M10 28 L10 20 Q10 16 14 16 L26 16 Q30 16 30 20 L30 28" stroke="currentColor" stroke-width="2.5" fill="none"/>
+                                <rect x="8" y="28" width="24" height="4" rx="2" fill="currentColor"/>
+                                <rect x="12" y="32" width="2" height="4" fill="currentColor"/>
+                                <rect x="26" y="32" width="2" height="4" fill="currentColor"/>
+                                <path d="M12 16 L12 8 Q12 6 14 6 L26 6 Q28 6 28 8 L28 16" stroke="currentColor" stroke-width="2" fill="none"/>
+                                <circle cx="20" cy="11" r="2" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="category-text">
+                            <h3>Interieur</h3>
+                            <p>内饰</p>
+                        </div>
+                    </div>
+                    <button class="category-action" onclick="goToEvaluation(this.closest('.category-item').querySelector('.category-text p').innerText)">新建评价 ➤</button>
+                </div>
+
+                <!-- 底盘 -->
+                <div class="category-item">
+                    <div class="category-badge" onclick="showEvaluations('底盘'); event.stopPropagation();">0</div>
+                    <div class="category-main">
+                        <div class="category-icon-box">
+                            <svg class="category-icon" viewBox="0 0 40 40" fill="none">
+                                <!-- 悬挂系统图标 -->
+                                <rect x="8" y="19" width="24" height="2" fill="currentColor"/>
+                                <path d="M12 19 L12 12 M28 19 L28 12" stroke="currentColor" stroke-width="2"/>
+                                <path d="M10 12 L14 12 M26 12 L30 12" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="12" cy="25" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="28" cy="25" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+                                <path d="M8 8 Q12 6 16 8 L24 8 Q28 6 32 8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                            </svg>
+                        </div>
+                        <div class="category-text">
+                            <h3>Fahrwerk</h3>
+                            <p>底盘</p>
+                        </div>
+                    </div>
+                    <button class="category-action" onclick="goToEvaluation(this.closest('.category-item').querySelector('.category-text p').innerText)">新建评价 ➤</button>
+                </div>
+
+                <!-- 外饰 -->
+                <div class="category-item">
+                    <div class="category-badge" onclick="showEvaluations('外饰'); event.stopPropagation();">0</div>
+                    <div class="category-main">
+                        <div class="category-icon-box">
+                            <svg class="category-icon" viewBox="0 0 40 40" fill="none">
+                                <!-- 车身外观图标 -->
+                                <path d="M8 24 L8 20 Q8 16 12 16 L16 16 L18 12 L22 12 L24 16 L28 16 Q32 16 32 20 L32 24 Q32 26 30 26 L10 26 Q8 26 8 24 Z" fill="currentColor"/>
+                                <rect x="11" y="18" width="6" height="4" rx="1" fill="white"/>
+                                <rect x="23" y="18" width="6" height="4" rx="1" fill="white"/>
+                                <circle cx="13" cy="28" r="2.5" fill="currentColor"/>
+                                <circle cx="27" cy="28" r="2.5" fill="currentColor"/>
+                                <path d="M15 12 L12 10 M25 12 L28 10" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+                        <div class="category-text">
+                            <h3>Exterieur</h3>
+                            <p>外饰</p>
+                        </div>
+                    </div>
+                    <button class="category-action" onclick="goToEvaluation(this.closest('.category-item').querySelector('.category-text p').innerText)">新建评价 ➤</button>
+                </div>
+
+                <!-- 声学 -->
+                <div class="category-item">
+                    <div class="category-badge" onclick="showEvaluations('声学'); event.stopPropagation();">0</div>
+                    <div class="category-main">
+                        <div class="category-icon-box">
+                            <svg class="category-icon" viewBox="0 0 40 40" fill="none">
+                                <!-- 声波音响图标 -->
+                                <path d="M14 16 L14 24 L18 24 L24 28 L24 12 L18 16 Z" fill="currentColor"/>
+                                <path d="M27 15 Q30 20 27 25" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+                                <path d="M30 12 Q35 20 30 28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                                <circle cx="10" cy="20" r="1.5" fill="currentColor"/>
+                                <circle cx="6" cy="20" r="1" fill="currentColor" opacity="0.6"/>
+                            </svg>
+                        </div>
+                        <div class="category-text">
+                            <h3>Akustik</h3>
+                            <p>声学</p>
+                        </div>
+                    </div>
+                    <button class="category-action" onclick="goToEvaluation(this.closest('.category-item').querySelector('.category-text p').innerText)">新建评价 ➤</button>
+                </div>
+
+                <!-- 电子电器 -->
+                <div class="category-item">
+                    <div class="category-badge" onclick="showEvaluations('电子电器'); event.stopPropagation();">0</div>
+                    <div class="category-main">
+                        <div class="category-icon-box">
+                            <svg class="category-icon" viewBox="0 0 40 40" fill="none">
+                                <!-- 电路板图标 -->
+                                <rect x="8" y="8" width="24" height="24" rx="2" fill="currentColor" opacity="0.9"/>
+                                <circle cx="14" cy="14" r="2" fill="white"/>
+                                <circle cx="26" cy="14" r="2" fill="white"/>
+                                <circle cx="14" cy="26" r="2" fill="white"/>
+                                <circle cx="26" cy="26" r="2" fill="white"/>
+                                <path d="M14 14 L26 14 M14 26 L26 26 M14 14 L14 26 M26 14 L26 26" stroke="white" stroke-width="1" opacity="0.5"/>
+                                <rect x="18" y="18" width="4" height="4" fill="white"/>
+                                <path d="M6 20 L8 20 M32 20 L34 20 M20 6 L20 8 M20 32 L20 34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="category-text">
+                            <h3>Elektrik&Elektronik</h3>
+                            <p>电子电器</p>
+                        </div>
+                    </div>
+                    <button class="category-action" onclick="goToEvaluation(this.closest('.category-item').querySelector('.category-text p').innerText)">新建评价 ➤</button>
+                </div>
+
+                <!-- 其它 -->
+                <div class="category-item">
+                    <div class="category-badge" onclick="showEvaluations('其它'); event.stopPropagation();">0</div>
+                    <div class="category-main">
+                        <div class="category-icon-box">
+                            <svg class="category-icon" viewBox="0 0 40 40" fill="none">
+                                <!-- 通用设置图标 -->
+                                <circle cx="20" cy="20" r="12" fill="none" stroke="currentColor" stroke-width="2.5"/>
+                                <circle cx="20" cy="20" r="5" fill="currentColor"/>
+                                <path d="M20 8 L20 12 M20 28 L20 32 M8 20 L12 20 M28 20 L32 20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                                <path d="M11.5 11.5 L14.5 14.5 M25.5 25.5 L28.5 28.5 M28.5 11.5 L25.5 14.5 M14.5 25.5 L11.5 28.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="category-text">
+                            <h3>Allgemein</h3>
+                            <p>其它</p>
+                        </div>
+                    </div>
+                    <button class="category-action" onclick="goToEvaluation(this.closest('.category-item').querySelector('.category-text p').innerText)">新建评价 ➤</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部工具栏 -->
+        <div class="bottom-toolbar">
+            <a href="/" class="toolbar-btn">
+                <svg class="toolbar-icon" viewBox="0 0 24 24" fill="none">
+                    <path d="M15 19L8 12L15 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>返回</span>
+            </a>
+            <button class="toolbar-btn" onclick="showVehicleInfo()">
+                <svg class="toolbar-icon" viewBox="0 0 24 24" fill="none">
+                    <path d="M5 19H19V8L12 3L5 8V19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <rect x="9" y="13" width="6" height="6" stroke="currentColor" stroke-width="2"/>
+                </svg>
+                <span>车型信息</span>
+            </button>
+            <button class="toolbar-btn" onclick="switchVehicle()">
+                <svg class="toolbar-icon" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 3V21M12 3L8 7M12 3L16 7M12 21L8 17M12 21L16 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>转换车型</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="switchModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeSwitchModal()">×</button>
+            <h2>转换车型</h2>
+            <p>请输入密码以转换车型</p>
+            <input type="password" id="switchPassword" placeholder="请输入密码">
+            <button class="btn btn-primary" onclick="confirmSwitch()">确认</button>
+        </div>
+    </div>
+
+    <!-- 评价详情模态框 -->
+    <div id="evaluationsModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <button class="modal-close" onclick="closeEvaluationsModal()">×</button>
+            <h2 id="evaluationModalTitle">评价详情</h2>
+            <div id="evaluationsList" style="max-height: 500px; overflow-y: auto;">
+                <!-- 动态内容 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const activityId = {{ activity.id }};
+        const vehicleId = {{ vehicle.id }};
+        
+        function goToEvaluation(category) {
+            window.location.href = `/evaluation/${activityId}/${vehicleId}/${encodeURIComponent(category)}`;
+        }
+
+        function showVehicleInfo() {
+            window.open(`/pdf_viewer/${vehicleId}`, '_blank', 'width=1000,height=800');
+        }
+
+        function switchVehicle() {
+            $('#switchModal').show();
+        }
+
+        function closeSwitchModal() {
+            $('#switchModal').hide();
+            $('#switchPassword').val('');
+        }
+
+        function confirmSwitch() {
+            const password = $('#switchPassword').val();
+            if (password === '1234') {
+                alertSuccess(t('switch_success'));
+                closeSwitchModal();
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1500);
+            } else {
+                alertError(t('password_error'));
+            }
+        }
+
+        function updateCounts() {
+            $.get(`/api/evaluations/${activityId}/${vehicleId}`, function(data) {
+                const counts = {};
+                data.forEach(eval => {
+                    counts[eval.category] = (counts[eval.category] || 0) + 1;
+                });
+                
+                const categories = ['动力总成', '内饰', '底盘', '外饰', '声学', '电子电器', '其它'];
+                categories.forEach((cat, index) => {
+                    $('.category-badge').eq(index).text(counts[cat] || 0);
+                });
+            });
+        }
+
+        function showEvaluations(category) {
+            $.get(`/api/evaluations/${activityId}/${vehicleId}`, function(data) {
+                const categoryEvaluations = data.filter(eval => eval.category === category);
+                
+                $('#evaluationModalTitle').text(`${category} - 评价详情`);
+                
+                if (categoryEvaluations.length === 0) {
+                    $('#evaluationsList').html('<p style="text-align: center; color: #666;">暂无评价</p>');
+                } else {
+                    let html = '';
+                    categoryEvaluations.forEach(eval => {
+                        html += `
+                            <div style="border-bottom: 1px solid #e0e0e0; padding: 16px 0;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                    <strong>${eval.evaluator_name}</strong>
+                                    <span style="background: ${getScoreColor(eval.score)}; color: white; padding: 4px 12px; border-radius: 4px; font-weight: bold;">${eval.score}</span>
+                                </div>
+                                <div style="color: #333; line-height: 1.6;">${eval.content}</div>
+                                <div style="font-size: 12px; color: #999; margin-top: 8px;">${new Date(eval.created_at).toLocaleString('zh-CN')}</div>
+                            </div>
+                        `;
+                    });
+                    $('#evaluationsList').html(html);
+                }
+                
+                $('#evaluationsModal').show();
+            });
+        }
+
+        function getScoreColor(score) {
+            if (score <= 3) return '#dc3545';
+            if (score <= 5) return '#fd7e14';
+            if (score <= 7) return '#ffc107';
+            return '#28a745';
+        }
+
+        function closeEvaluationsModal() {
+            $('#evaluationsModal').hide();
+        }
+
+        $(document).ready(function() {
+            updateCounts();
+        });
+    </script>
+</body>
+</html>

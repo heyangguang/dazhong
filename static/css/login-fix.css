@@ -1,0 +1,35 @@
+/* 登录页面修复样式 */
+.admin-login-wrapper input[type="text"],
+.admin-login-wrapper input[type="password"] {
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+    pointer-events: auto !important;
+    cursor: text !important;
+}
+
+.form-group {
+    position: relative !important;
+    z-index: auto !important;
+}
+
+.input-icon {
+    pointer-events: none !important;
+}
+
+/* 移除可能的覆盖层 */
+.login-card::before,
+.login-card::after {
+    display: none !important;
+}
+
+/* 确保表单元素正常工作 */
+.login-form * {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* 调试样式 - 临时添加边框查看问题 */
+.form-input:hover {
+    border-color: #1a73e8 !important;
+}

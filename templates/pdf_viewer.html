@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ vehicle.name }} - 车辆信息</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .pdf-container {
+            width: 100%;
+            height: 90vh;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .close-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #0891b2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        .no-pdf {
+            text-align: center;
+            padding: 100px 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <button class="close-btn" onclick="window.close()">关闭</button>
+    <div class="container">
+        <h2 style="text-align: center; margin: 20px 0;">{{ vehicle.name }} - 车辆信息文档</h2>
+        {% if vehicle.info_file %}
+        <div class="pdf-container">
+            <iframe src="/vehicle/{{ vehicle.id }}/pdf" width="100%" height="100%" style="border: none;"></iframe>
+        </div>
+        {% else %}
+        <div class="no-pdf">
+            <h3>暂无车辆信息文档</h3>
+            <p>请在后台管理系统中上传车辆信息PDF文件</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

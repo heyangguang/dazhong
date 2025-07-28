@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台登录 - 试车评价系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/login-fix.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/custom-alert.js"></script>
+    <script src="/static/js/language.js"></script>
+</head>
+<body>
+    <div class="admin-login-wrapper">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <svg class="login-logo" viewBox="0 0 80 80" fill="none">
+                        <circle cx="40" cy="40" r="35" stroke="#1a73e8" stroke-width="2" fill="none"/>
+                        <path d="M40 20 L55 35 L40 50 L25 35 Z" fill="#1a73e8" opacity="0.8"/>
+                        <circle cx="40" cy="35" r="8" fill="white"/>
+                    </svg>
+                    <h1 data-lang="admin.title">后台管理系统</h1>
+                    <p data-lang="admin.subtitle">试车评价管理平台</p>
+                </div>
+                
+                <form method="POST" class="login-form" onsubmit="return validateLogin(event)">
+                    <div class="form-group">
+                        <div class="input-icon">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <input type="text" name="username" data-lang="admin.username" placeholder="请输入用户名" required class="form-input" autocomplete="username">
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="input-icon">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <rect x="5" y="11" width="14" height="10" rx="2" ry="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <input type="password" name="password" data-lang="admin.password" placeholder="请输入密码" required class="form-input" autocomplete="current-password">
+                    </div>
+                    
+                    <div class="form-remember">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="remember">
+                            <span>记住我</span>
+                        </label>
+                        <a href="#" class="forgot-link">忘记密码？</a>
+                    </div>
+                    
+                    <button type="submit" class="login-button">
+                        <span>登录系统</span>
+                        <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                            <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </form>
+                
+                <div class="login-footer">
+                    <p>默认账号：admin / admin123</p>
+                </div>
+            </div>
+            
+            <div class="login-bg">
+                <div class="bg-shape bg-shape-1"></div>
+                <div class="bg-shape bg-shape-2"></div>
+                <div class="bg-shape bg-shape-3"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function validateLogin(event) {
+            event.preventDefault();
+            const form = event.target;
+            const username = form.username.value;
+            const password = form.password.value;
+            
+            if (!username || !password) {
+                alertError('请输入用户名和密码');
+                return false;
+            }
+            
+            // 提交表单
+            form.submit();
+            return true;
+        }
+        
+        // 检查是否有错误消息
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    alertError('{{ message }}');
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        // 调试：检查输入框是否可以正常工作
+        $(document).ready(function() {
+            console.log('页面加载完成');
+            
+            // 测试输入框点击
+            $('.form-input').on('click', function() {
+                console.log('输入框被点击了');
+            });
+            
+            // 测试输入框聚焦
+            $('.form-input').on('focus', function() {
+                console.log('输入框获得焦点');
+            });
+            
+            // 检查是否有元素覆盖
+            $('.form-input').each(function() {
+                const rect = this.getBoundingClientRect();
+                const element = document.elementFromPoint(rect.left + 10, rect.top + 10);
+                if (element !== this) {
+                    console.error('输入框被其他元素覆盖:', element);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

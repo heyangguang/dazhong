@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>评价分类 - {{ activity.name }}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/custom-alert.js"></script>
+    <script src="/static/js/language.js"></script>
+</head>
+<body>
+    <div class="categories-wrapper">
+        <!-- 顶部栏 -->
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <button onclick="goBack()" class="back-btn">← <span data-lang="common.back">返回</span></button>
+                <span class="page-title" data-lang="category.title">选择评价分类</span>
+            </div>
+            <div class="top-bar-right">
+                <span class="activity-info">{{ activity.name }}</span>
+                <span class="vehicle-info">{{ vehicle.name }}</span>
+            </div>
+        </div>
+
+        <!-- 主要内容 -->
+        <div class="categories-content">
+            <h1 class="categories-title" data-lang="category.title">请选择评价分类</h1>
+        </div>
+
+        <!-- 分类网格 -->
+        <div class="categories-container">
+            <div class="categories-grid">
+                {% for category in categories %}
+                <div class="category-item">
+                    <div class="category-badge" onclick="showEvaluations('{{ category.name }}'); event.stopPropagation();">0</div>
+                    <div class="category-main">
+                        <div class="category-icon-box">
+                            {% if category.icon == 'powertrain' %}
+                            <svg class="category-icon" viewBox="0 0 40 40" fill="none">
+                                <!-- 发动机/电机图标 -->
+                                <circle cx="20" cy="20" r="12" fill="currentColor" opacity="0.9"/>
+                                <circle cx="20" cy="20" r="8" fill="white"/>
+                                <rect x="18" y="8" width="4" height="8" fill="currentColor"/>
+                                <rect x="18" y="24" width="4" height="8" fill="currentColor"/>
+                                <rect x="8" y="18" width="8" height="4" fill="currentColor"/>
+                                <rect x="24" y="18" width="8" height="4" fill="currentColor"/>
+                                <circle cx="20" cy="20" r="3" fill="currentColor"/>
+                            </svg>
+                            {% elif category.icon == 'chassis' %}
+                            <svg class="category-icon" viewBox="0 0 40 40" fill="none">
+                                <!-- 底盘悬架图标 -->
+                                <rect x="10" y="15" width="20" height="10" rx="2" fill="currentColor" opacity="0.9"/>
+                                <circle cx="12" cy="28" r="4" fill="currentColor"/>
+                                <circle cx="28" cy="28" r="4" fill="currentColor"/>
+                                <path d="M12 24 L12 20 M28 24 L28 20" stroke="currentColor" stroke-width="2"/>
+                                <rect x="16" y="8" width="8" height="7" fill="currentColor" opacity="0.6"/>
+                                <path d="M8 20 L32 20" stroke="white" stroke-width="1"/>
+                            </svg>
+                            {% elif category.icon == 'interior' %}
+                            <svg class="category-icon" viewBox="0 0 40 40" fill="none">
+                                <!-- 内饰座椅图标 -->
+                                <rect x="12" y="8" width="16" height="20" rx="3" fill="currentColor" opacity="0.9"/>
+                                <rect x="14" y="10" width="12" height="8" rx="2" fill="white" opacity="0.8"/>
+                                <rect x="14" y="20" width="12" height="6" rx="2" fill="white" opacity="0.8"/>
+                                <rect x="10" y="28" width="20" height="4" rx="2" fill="currentColor"/>
+                                <path d="M14 13 L26 13 M14 15 L26 15" stroke="currentColor" stroke-width="0.5"/>
+                                <path d="M14 22 L26 22 M14 24 L26 24" stroke="currentColor" stroke-width="0.5"/>
+                            </svg>
+                            {% elif category.icon == 'exterior' %}
+                            <svg class="category-icon" viewBox="0 0 40 40" fill="none">
+                                <!-- 外饰车身图标 -->
+                                <path d="M8 22 Q8 18 12 18 L28 18 Q32 18 32 22 L32 26 Q32 28 30 28 L10 28 Q8 28 8 26 Z" fill="currentColor" opacity="0.9"/>
+                                <path d="M12 18 Q12 14 16 14 L24 14 Q28 14 28 18" stroke="currentColor" stroke-width="2" fill="none"/>
+                                <rect x="15" y="21" width="4" height="3" fill="white" opacity="0.8"/>
+                                <rect x="21" y="21" width="4" height="3" fill="white" opacity="0.8"/>
+                                <circle cx="13" cy="28" r="2" fill="currentColor"/>
+                                <circle cx="27" cy="28" r="2" fill="currentColor"/>
+                                <path d="M15 12 L12 10 M25 12 L28 10" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                            {% elif category.icon == 'acoustic' %}
+                            <svg class="category-icon" viewBox="0 0 40 40" fill="none">
+                                <!-- 声波音响图标 -->
+                                <path d="M14 16 L14 24 L18 24 L24 28 L24 12 L18 16 Z" fill="currentColor"/>
+                                <path d="M27 15 Q30 20 27 25" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+                                <path d="M30 12 Q35 20 30 28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                                <circle cx="10" cy="20" r="1.5" fill="currentColor"/>
+                                <circle cx="6" cy="20" r="1" fill="currentColor" opacity="0.6"/>
+                            </svg>
+                            {% elif category.icon == 'electronic' %}
+                            <svg class="category-icon" viewBox="0 0 40 40" fill="none">
+                                <!-- 电路板图标 -->
+                                <rect x="8" y="8" width="24" height="24" rx="2" fill="currentColor" opacity="0.9"/>
+                                <circle cx="14" cy="14" r="2" fill="white"/>
+                                <circle cx="26" cy="14" r="2" fill="white"/>
+                                <circle cx="14" cy="26" r="2" fill="white"/>
+                                <circle cx="26" cy="26" r="2" fill="white"/>
+                                <path d="M14 14 L26 14 M14 26 L26 26 M14 14 L14 26 M26 14 L26 26" stroke="white" stroke-width="1" opacity="0.5"/>
+                                <rect x="18" y="18" width="4" height="4" fill="white"/>
+                                <path d="M6 20 L8 20 M32 20 L34 20 M20 6 L20 8 M20 32 L20 34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            {% else %}
+                            <svg class="category-icon" viewBox="0 0 40 40" fill="none">
+                                <!-- 其他通用图标 -->
+                                <circle cx="20" cy="20" r="12" stroke="currentColor" stroke-width="2" fill="none"/>
+                                <path d="M20 14 L20 26 M14 20 L26 20" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="20" cy="10" r="2" fill="currentColor"/>
+                                <circle cx="30" cy="20" r="2" fill="currentColor"/>
+                                <circle cx="20" cy="30" r="2" fill="currentColor"/>
+                                <circle cx="10" cy="20" r="2" fill="currentColor"/>
+                            </svg>
+                            {% endif %}
+                        </div>
+                        <div class="category-text">
+                            <h3>{{ category.name_en or category.name }}</h3>
+                            <p>{{ category.name }}</p>
+                        </div>
+                    </div>
+                    <button class="category-action" onclick="goToEvaluation('{{ category.name }}')"><span data-lang="category.newEvaluation">新建评价</span> ➤</button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- 语言切换 -->
+        <div class="lang-switch" style="position: fixed; bottom: 20px; right: 20px; background: rgba(255,255,255,0.9); padding: 10px 20px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000;">
+            <span class="lang-zh" onclick="switchLang('zh')" style="cursor: pointer; margin: 0 10px;">中文</span>
+            |
+            <span class="lang-en" onclick="switchLang('en')" style="cursor: pointer; margin: 0 10px;">English</span>
+        </div>
+    </div>
+
+    <!-- 评价详情模态框 -->
+    <div id="evaluationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle"></h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- 动态加载内容 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const activityId = {{ activity.id }};
+        const vehicleId = {{ vehicle.id }};
+        
+        // 加载评价数量
+        function loadEvaluationCounts() {
+            $.get(`/api/evaluation_counts/${activityId}/${vehicleId}`, function(counts) {
+                $('.category-item').each(function() {
+                    const categoryName = $(this).find('.category-text p').text();
+                    const count = counts[categoryName] || 0;
+                    $(this).find('.category-badge').text(count);
+                });
+            });
+        }
+        
+        // 显示评价列表
+        function showEvaluations(category) {
+            $('#modalTitle').text(category + ' - ' + t('category.viewEvaluations'));
+            $('#modalBody').html('<div class="loading">' + t('common.loading') + '</div>');
+            $('#evaluationModal').show();
+            
+            $.get(`/api/evaluations/${activityId}/${vehicleId}`, function(data) {
+                const categoryEvaluations = data.filter(e => e.category === category);
+                
+                if (categoryEvaluations.length === 0) {
+                    $('#modalBody').html('<div class="empty-state">' + t('category.noEvaluations') + '</div>');
+                    return;
+                }
+                
+                let html = '<div class="evaluation-list">';
+                categoryEvaluations.forEach(eval => {
+                    const scoreClass = eval.score <= 3 ? 'score-red' : 
+                                     eval.score <= 5 ? 'score-orange' :
+                                     eval.score <= 7 ? 'score-yellow' : 'score-green';
+                    
+                    html += `
+                        <div class="evaluation-item">
+                            <div class="eval-header">
+                                <span class="eval-person">${eval.evaluator_name}</span>
+                                <span class="eval-score ${scoreClass}">${eval.score}/10</span>
+                                <span class="eval-time">${eval.created_at}</span>
+                            </div>
+                            <div class="eval-content">${eval.content}</div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                $('#modalBody').html(html);
+            });
+        }
+        
+        function closeModal() {
+            $('#evaluationModal').hide();
+        }
+        
+        function goToEvaluation(category) {
+            window.location.href = `/evaluation/${activityId}/${vehicleId}/${encodeURIComponent(category)}`;
+        }
+        
+        function goBack() {
+            window.location.href = '/';
+        }
+        
+        // 页面加载时获取评价数量
+        $(document).ready(function() {
+            loadEvaluationCounts();
+        });
+        
+        // 点击模态框外部关闭
+        $('#evaluationModal').click(function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
